@@ -1,0 +1,6 @@
+D:\FiveM\VinaSkyOnline\workspace\_resources\vinaradio\FiveM_RadioServer.net.dll
+D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_RadioServer\obj\Debug\FiveM_RadioServer.csproj.CoreCompileInputs.cache
+D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_RadioServer\obj\Debug\FiveM_RadioServer.csproj.CopyComplete
+D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_RadioServer\obj\Debug\FiveM_RadioServer.net.dll
+D:\FiveM\VinaSkyOnline\workspace\_resources\fivemradio\FiveM_RadioServer.net.dll
+D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_RadioServer\obj\Debug\FiveM_RadioServer.csprojAssemblyReference.cache

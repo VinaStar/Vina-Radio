@@ -1,0 +1,5 @@
+D:\FiveM\VinaSkyOnline\workspace\_resources\vinaradio\Vina_RadioClient.net.dll
+D:\FiveM\VinaSkyOnline\workspace\Vina-Radio\Vina_RadioClient\obj\Debug\Vina_RadioClient.csprojAssemblyReference.cache
+D:\FiveM\VinaSkyOnline\workspace\Vina-Radio\Vina_RadioClient\obj\Debug\Vina_RadioClient.csproj.CoreCompileInputs.cache
+D:\FiveM\VinaSkyOnline\workspace\Vina-Radio\Vina_RadioClient\obj\Debug\Vina_RadioClient.csproj.CopyComplete
+D:\FiveM\VinaSkyOnline\workspace\Vina-Radio\Vina_RadioClient\obj\Debug\Vina_RadioClient.net.dll

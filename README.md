@@ -7,4 +7,4 @@
 ![Client Performance](https://i.imgur.com/fJcxfoG.png)  
   
 **Server Performance**  
-![Client Performance](https://i.imgur.com/G2oeYHK.png)  
+![Client Performance](https://i.imgur.com/reqphqH.png)  

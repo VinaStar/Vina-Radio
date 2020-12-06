@@ -1,6 +1,0 @@
-D:\FiveM\VinaSkyOnline\workspace\_resources\vinaradio\FiveM_Radio.net.dll
-D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_Radio\obj\Debug\FiveM_Radio.csproj.CoreCompileInputs.cache
-D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_Radio\obj\Debug\FiveM_Radio.csproj.CopyComplete
-D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_Radio\obj\Debug\FiveM_Radio.net.dll
-D:\FiveM\VinaSkyOnline\workspace\_resources\fivemradio\FiveM_Radio.net.dll
-D:\FiveM\VinaSkyOnline\workspace\FiveM_Radio\FiveM_Radio\obj\Debug\FiveM_Radio.csprojAssemblyReference.cache

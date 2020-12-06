@@ -1,0 +1,6 @@
+*.zip
+_releases
+.vs
+.sln
+bin
+obj

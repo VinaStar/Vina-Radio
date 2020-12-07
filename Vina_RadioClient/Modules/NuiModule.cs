@@ -32,9 +32,14 @@ namespace Vina_RadioClient.Modules
             Client.SendNuiActionData("HideRadioSwitcher");
         }
 
-        public void AddRadioChannel(RadioChannels channel)
+        public void AddRadioChannel(NuiRadioChannel nuiRadioChannel)
         {
-            Client.SendNuiActionData("AddRadioChannel", channel);
+            Client.SendNuiActionData("AddRadioChannel", nuiRadioChannel);
+        }
+
+        public void AddRadioChannel(RadioChannels channel, string label)
+        {
+            Client.SendNuiActionData("AddRadioChannel", new NuiRadioChannel(channel, label));
         }
 
         public void SelectRadioChannelIndex(int index)

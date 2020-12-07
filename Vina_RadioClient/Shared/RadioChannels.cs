@@ -24,4 +24,16 @@
         RADIO_21_DLC_XM17,
         RADIO_22_DLC_BATTLE_MIX1_RADIO,
     }
+
+    public class NuiRadioChannel
+    {
+        public RadioChannels Channel { get; set; }
+        public string Label { get; set; }
+
+        public NuiRadioChannel(RadioChannels channel, string label)
+        {
+            Channel = channel;
+            Label = label;
+        }
+    }
 }

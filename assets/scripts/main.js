@@ -16,7 +16,7 @@
 		var action = event.data.action;
 		var data = event.data.data;
 		
-		console.log("received message from game: ", action, data);
+		console.log("Vina Radio received message from game: ", action, data);
 			
 		switch(action) {
 			case "ShowRadioSwitcher":
@@ -28,7 +28,7 @@
 				break;
 				
 			case "AddRadioChannel":
-				AddRadioChannel(data);
+				AddRadioChannel(data.Channel, data.Label);
 				break;
 				
 			case "SelectRadioChannelIndex":
@@ -42,8 +42,8 @@
 		return $("ui").find("#container");
 	}
 	
-	function createRadioChannel(name) {
-		getContainer().append($('<div class="channel-icon"><img src="images/' + name + '.png" /></div>'));
+	function createRadioChannel(name, label) {
+		getContainer().append($('<div class="channel-icon"><div class="img-wrap"><img src="images/' + name + '.png" /></div><span>' + label + '</span></div>'));
 	}
 	
 	var allChannels = [
@@ -79,28 +79,31 @@
 	*/
 	
 	function ShowRadioSwitcher() {
-		var container = getContainer().addClass("visible");
+		getContainer().addClass("visible");
 	}
 	
 	function HideRadioSwitcher() {
-		var container = getContainer().removeClass("visible");
+		getContainer().removeClass("visible");
 	}
 	
 	function SelectRadioChannelIndex(channelIndex) {
-		var container = getContainer();
-		var channels = container.find(".channel-icon");
-		$(channels).removeClass("pre-selected").removeClass("selected").removeClass("post-selected");
-		$(channels[channelIndex - 3]).addClass("pre-selected");
-		$(channels[channelIndex - 2]).addClass("pre-selected");
-		$(channels[channelIndex - 1]).addClass("pre-selected");
-		$(channels[channelIndex]).addClass("selected");
-		$(channels[channelIndex + 1]).addClass("post-selected");
-		$(channels[channelIndex + 2]).addClass("post-selected");
-		$(channels[channelIndex + 3]).addClass("post-selected");
+		var channelIcons = getContainer().find(".channel-icon");
+		$(channelIcons).removeClass("pre-selected").removeClass("selected").removeClass("post-selected");
+		$(channelIcons[channelIndex - 3]).addClass("pre-selected");
+		$(channelIcons[channelIndex - 2]).addClass("pre-selected");
+		$(channelIcons[channelIndex - 1]).addClass("pre-selected");
+		$(channelIcons[channelIndex]).addClass("selected");
+		$(channelIcons[channelIndex + 1]).addClass("post-selected");
+		$(channelIcons[channelIndex + 2]).addClass("post-selected");
+		$(channelIcons[channelIndex + 3]).addClass("post-selected");
 	}
 	
-	function AddRadioChannel(channelIndex) {
-		createRadioChannel(allChannels[channelIndex]);
+	function AddRadioChannel(channelIndex, channelLabel) {
+		createRadioChannel(allChannels[channelIndex], channelLabel);
+	}
+	
+	function ToggleRadioChannel(channelIndex, isHidden) {
+		
 	}
 	
 })();

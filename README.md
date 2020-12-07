@@ -12,7 +12,7 @@
 ![Vina Radio Screenshot](https://i.imgur.com/a1VllTD.png)  
   
 **Client Performance**  
-![Client Performance](https://i.imgur.com/fJcxfoG.png)  
+![Client Performance](https://i.imgur.com/okFBGDS.png)  
   
 **Server Performance**  
 ![Client Performance](https://i.imgur.com/reqphqH.png)  

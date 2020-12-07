@@ -1,8 +1,9 @@
 # Vina-Radio
   
 ### FEATURES:
-- Radio channel persistence *(When entering a different vehicle)*
+- Can customize channel names.
 - Can customize Icons & UI with CSS.
+- Radio channel persistence *(When entering a different vehicle)*
 - Can configure resource in the server.cfg *(coming soon)*
 - Can use exports methods with your own resources *(coming soon)*
   

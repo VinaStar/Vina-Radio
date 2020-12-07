@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
 html, body {
 	top: 0;
 	left: 0;
@@ -9,7 +11,7 @@ html, body {
 	display: block;
 	position: fixed;
 	color: #fff;
-	font-family: "Open Sans";
+	font-family: 'Oswald';
 	background: rgba(0, 0, 0, 0);
 }
 
@@ -25,11 +27,7 @@ ui {
 	position: absolute;
 }
 
-ui[id="radio"] {
-	
-}
-
-ui[id="radio"] #container {
+ui #container {
 	top: 50%;
 	left: 50%;
 	opacity: 0;
@@ -38,41 +36,57 @@ ui[id="radio"] #container {
 	transform: translate(-50%, -50%);
 	transition: 0.2s ease-out;
 }
-ui[id="radio"] #container.visible {
+ui #container.visible {
 	opacity: 1;
 }
 
-ui[id="radio"] #container .channel-icon {
+ui .channel-icon {
 	width: 128px;
 	height: 128px;
 	margin: 20px;
 	display: none;
-	overflow: hidden;
-	border-radius: 128px;
 	transition: 0.3s ease-out;
 	transform: scale(0.66);
 }
 
-ui[id="radio"] #container .channel-icon.pre-selected,
-ui[id="radio"] #container .channel-icon.selected,
-ui[id="radio"] #container .channel-icon.post-selected {
+ui .channel-icon.pre-selected,
+ui .channel-icon.selected,
+ui .channel-icon.post-selected {
 	display: block;
 }
-ui[id="radio"] #container .channel-icon.selected {
+ui .channel-icon.selected {
 	transform: scale(1);	
 }
-
-ui[id="radio"] #container .channel-icon img {
+ui .channel-icon .img-wrap {
+	overflow: hidden;
+	border-radius: 128px;
+}
+ui .channel-icon img {
 	width: 100%;
 	height: auto;
 	display: block;
 	opacity: 0;
 	transition: 0.4s ease-out;
 }
-ui[id="radio"] #container .channel-icon.pre-selected img,
-ui[id="radio"] #container .channel-icon.post-selected img {
+ui .channel-icon span {
+	display: block;
+	text-align: center;
+	font-size: 20px;
+	line-height: 24px;
+	color: #fff;
+	opacity: 1;
+	padding-top: 10px;
+	font-weight: bold;
+	transition: 0.4s ease-out;
+	text-shadow: 2px 2px #000;
+}
+ui .channel-icon.pre-selected img,
+ui .channel-icon.post-selected img,
+ui .channel-icon.pre-selected span,
+ui .channel-icon.post-selected span {
 	opacity: 0.3;
 }
-ui[id="radio"] #container .channel-icon.selected img {
+ui .channel-icon.selected img,
+ui .channel-icon.selected span {
 	opacity: 1;
 }

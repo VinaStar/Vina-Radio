@@ -9,7 +9,7 @@
 ---
   
 **Preview**  
-![Vina Radio Screenshot](https://i.imgur.com/u8LusFV.png)  
+![Vina Radio Screenshot](https://i.imgur.com/a1VllTD.png)  
   
 **Client Performance**  
 ![Client Performance](https://i.imgur.com/fJcxfoG.png)  

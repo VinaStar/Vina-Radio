@@ -1,18 +1,20 @@
 # Vina-Radio
   
 ### FEATURES:
-- Radio channel persistence *(When entering a different vehicle)*
+- Can customize channel names.
 - Can customize Icons & UI with CSS.
+- Can use gamepad and keyboard/mouse to switch channels. (LeftDpad or Q)
+- Radio channel persistence *(When entering a different vehicle)*
 - Can configure resource in the server.cfg *(coming soon)*
 - Can use exports methods with your own resources *(coming soon)*
   
 ---
   
 **Preview**  
-![Vina Radio Screenshot](https://i.imgur.com/u8LusFV.png)  
+![Vina Radio Screenshot](https://i.imgur.com/a1VllTD.png)  
   
 **Client Performance**  
-![Client Performance](https://i.imgur.com/fJcxfoG.png)  
+![Client Performance](https://i.imgur.com/okFBGDS.png)  
   
 **Server Performance**  
 ![Client Performance](https://i.imgur.com/reqphqH.png)  

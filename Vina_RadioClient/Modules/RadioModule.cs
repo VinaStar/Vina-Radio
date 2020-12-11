@@ -27,6 +27,34 @@ namespace Vina_RadioClient.Modules
 
         public int SelectedRadioIndex { get; private set; } = 0;
         public bool RadioWheelVisible { get; private set; } = false;
+        public bool RadioBoosted 
+        { 
+            get
+            {
+                if (Game.PlayerPed.CurrentVehicle != null && boostedVehicleRadio.ContainsKey(Game.PlayerPed.CurrentVehicle.NetworkId))
+                {
+                    return boostedVehicleRadio[Game.PlayerPed.CurrentVehicle.NetworkId];
+                }
+                return false;
+            } 
+            private set
+            {
+                if (Game.PlayerPed.CurrentVehicle != null && Game.PlayerPed.CurrentVehicle.Exists())
+                {
+                    int vehicleNetId = Game.PlayerPed.CurrentVehicle.NetworkId;
+                    if (boostedVehicleRadio.ContainsKey(vehicleNetId))
+                    {
+                        boostedVehicleRadio[vehicleNetId] = value;
+                    }
+                    else
+                    {
+                        boostedVehicleRadio.Add(vehicleNetId, value);
+                    }
+
+                    Client.TriggerServerEvent("ToggleLoudRadio", Game.PlayerPed.CurrentVehicle.NetworkId, value);
+                }
+            }
+        }
 
         #endregion
         #region VARIABLES
@@ -37,7 +65,9 @@ namespace Vina_RadioClient.Modules
         int now = Game.GameTime;
         bool isInVehicle = false;
         bool wasInVehicle = false;
-        bool wasRadarVisible = false;
+        bool loudRadioEnabled = false;
+        Dictionary<int, bool> boostedVehicleRadio = new Dictionary<int, bool>();
+
         Control radioKey = Control.VehicleRadioWheel;
         List<RadioChannels> _radioChannelList = new List<RadioChannels>();
 
@@ -47,6 +77,12 @@ namespace Vina_RadioClient.Modules
         protected override void OnModuleInitialized()
         {
             nuiModule = client.GetModule<NuiModule>();
+
+            script.AddEvent("ToggleLoudRadio", new Action<int, bool>(OnToggleLoudRadio));
+            script.AddEvent("RemoveLoudRadio", new Action<int>(OnRemoveLoudRadio));
+
+            Audio.SetAudioFlag(AudioFlag.DisableFlightMusic, true);
+            Audio.SetAudioFlag(AudioFlag.WantedMusicDisabled, true);
 
             AddRadioChannel(RadioChannels.OFF, "Off");
             AddRadioChannel(RadioChannels.RADIO_01_CLASS_ROCK, "Los Santos Rock Radio");
@@ -78,13 +114,44 @@ namespace Vina_RadioClient.Modules
         #endregion
         #region MODULE EVENTS
 
+        private void OnToggleLoudRadio(int vehicleNetId, bool boosted)
+        {
+            int vehicleHandle = API.NetworkGetEntityFromNetworkId(vehicleNetId);
 
+            if (API.DoesEntityExist(vehicleHandle))
+            {
+                if (boostedVehicleRadio.ContainsKey(vehicleNetId))
+                {
+                    boostedVehicleRadio[vehicleNetId] = boosted;
+                }
+                else
+                {
+                    boostedVehicleRadio.Add(vehicleNetId, boosted);
+                }
+
+                API.SetVehicleRadioLoud(vehicleHandle, boosted);
+
+                script.Log($"Set vehicle loud radio {vehicleNetId} to {boosted} [Vehicles: {boostedVehicleRadio.Count}]");
+            }
+        }
+
+        private void OnRemoveLoudRadio(int vehicleNetId)
+        {
+            if (boostedVehicleRadio.ContainsKey(vehicleNetId))
+            {
+                boostedVehicleRadio.Remove(vehicleNetId);
+
+                script.Log($"Removed vehicle loud radio {vehicleNetId} [Vehicles: {boostedVehicleRadio.Count}]");
+            }
+        }
 
         #endregion
         #region MODULE TICKS
 
         private async Task DisableDefaultRadio()
         {
+            await Client.Delay(0);
+
             if (isInVehicle)
             {
                 Game.DisableControlThisFrame(0, Control.VehicleRadioWheel);
@@ -129,20 +196,33 @@ namespace Vina_RadioClient.Modules
                     SelectNextRadioChannel();
                     lastTimeChanged = now;
                 }
+                else if (Game.IsControlJustPressed(0, Control.VehicleExit)
+                    || Game.IsDisabledControlJustPressed(0, Control.VehicleExit))
+                {
+                    loudRadioEnabled = !loudRadioEnabled;
+                    RadioBoosted = loudRadioEnabled;
+                }
             }
         }
 
         private async Task RadioProcess()
         {
-            await Client.Delay(4);
+            await Client.Delay(100);
 
             now = Game.GameTime;
 
             // Auto select last channel when entering vehicle
             isInVehicle = (Game.PlayerPed.CurrentVehicle != null);
-            if (!wasInVehicle && isInVehicle && Game.PlayerPed.IsSittingInVehicle() && Game.PlayerPed.SeatIndex == VehicleSeat.Driver && Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+            if (!wasInVehicle 
+                && isInVehicle 
+                && Game.PlayerPed.IsSittingInVehicle(Game.PlayerPed.CurrentVehicle) 
+                && Game.PlayerPed.SeatIndex == VehicleSeat.Driver 
+                && Game.PlayerPed.CurrentVehicle.IsEngineRunning
+                && API.IsPlayerVehicleRadioEnabled())
             {
+                await Client.Delay(1000);
                 wasInVehicle = true;
+                RadioBoosted = loudRadioEnabled; // update radio boosted
                 SelectRadioChannelByIndex(SelectedRadioIndex);
             }
             else if (wasInVehicle && !isInVehicle)
@@ -155,35 +235,25 @@ namespace Vina_RadioClient.Modules
             {
                 RadioWheelVisible = true;
 
+                script.AddTick(DrawInstruction);
+
                 // Show Nui
                 nuiModule.ShowRadioSwitcher();
 
                 PlayAudioIn();
 
                 Screen.Effects.Start(ScreenEffect.SwitchHudIn);
-
-                // Hide radar radar
-                if (!API.IsRadarHidden() && API.IsRadarPreferenceSwitchedOn())
-                {
-                    wasRadarVisible = true;
-                    API.DisplayRadar(false);
-                }
             }
             else if (RadioWheelVisible && !Game.IsControlPressed(0, radioKey))
             {
                 RadioWheelVisible = false;
 
+                script.RemoveTick(DrawInstruction);
+
                 // Hide Nui
                 nuiModule.HideRadioSwitcher();
 
                 PlayAudioOut();
-
-                // Show radar again if it was on before opening it
-                if (wasRadarVisible)
-                {
-                    wasRadarVisible = false;
-                    API.DisplayRadar(true);
-                }
 
                 Screen.Effects.Stop(ScreenEffect.SwitchHudIn);
                 Screen.Effects.Start(ScreenEffect.SwitchHudOut);
@@ -193,6 +263,44 @@ namespace Vina_RadioClient.Modules
                 }
                 Screen.Effects.Stop(ScreenEffect.SwitchHudOut);
             }
+        }
+
+        private async Task DrawInstruction()
+        {
+            API.HideHudAndRadarThisFrame();
+
+            int scaleform = API.RequestScaleformMovie("instructional_buttons");
+            while (!API.HasScaleformMovieLoaded(scaleform))
+            {
+                await Client.Delay(0);
+            }
+
+            API.PushScaleformMovieFunction(scaleform, "CLEAR_ALL");
+            API.PopScaleformMovieFunctionVoid();
+
+            API.PushScaleformMovieFunction(scaleform, "SET_CLEAR_SPACE");
+            API.PushScaleformMovieFunctionParameterInt(200);
+            API.PopScaleformMovieFunctionVoid();
+
+            API.PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT");
+            API.PushScaleformMovieFunctionParameterInt(0);
+            API.ScaleformMovieMethodAddParamPlayerNameString(API.GetControlInstructionalButton(2, (int)Control.VehicleExit, 1));
+            API.BeginTextCommandScaleformString("STRING");
+            API.AddTextComponentScaleform((RadioBoosted) ? "Loud Radio Enabled" : "Loud Radio Disabled");
+            API.EndTextCommandScaleformString();
+            API.PopScaleformMovieFunctionVoid();
+
+            API.PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS");
+            API.PopScaleformMovieFunctionVoid();
+
+            API.PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR");
+            API.PushScaleformMovieFunctionParameterInt(0);
+            API.PushScaleformMovieFunctionParameterInt(0);
+            API.PushScaleformMovieFunctionParameterInt(0);
+            API.PushScaleformMovieFunctionParameterInt(80);
+            API.PopScaleformMovieFunctionVoid();
+
+            API.DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0);
         }
 
         #endregion
@@ -246,7 +354,7 @@ namespace Vina_RadioClient.Modules
                 && Game.PlayerPed.CurrentVehicle != null
                 && API.DoesPlayerVehHaveRadio()
                 && API.IsPlayerVehRadioEnable()
-                && Game.PlayerPed.SeatIndex == VehicleSeat.Driver
+                && (Game.PlayerPed.SeatIndex == VehicleSeat.Driver/* || Game.PlayerPed.SeatIndex == VehicleSeat.Passenger*/)
                 && API.GetIsVehicleEngineRunning(Game.PlayerPed.CurrentVehicle.Handle));
         }
 
@@ -256,7 +364,7 @@ namespace Vina_RadioClient.Modules
             nuiModule.SelectRadioChannelIndex(SelectedRadioIndex);
 
             radioName = Enum.GetName(typeof(RadioChannels), _radioChannelList[SelectedRadioIndex]);
-            Client.TriggerServerEvent("Radio.SelectRadioName", radioName);
+            Client.TriggerServerEvent("PlayerRadioChannelChanged", SelectedRadioIndex);
 
             if (Game.PlayerPed.CurrentVehicle != null)
             {

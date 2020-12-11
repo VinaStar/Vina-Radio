@@ -1,10 +1,13 @@
 # Vina-Radio
   
 ### FEATURES:
+- Fully serversided.
 - Can customize channel names.
 - Can customize Icons & UI with CSS.
+- Can set loud radio (when outside the car, players hear loud music)
 - Can use gamepad and keyboard/mouse to switch channels. (LeftDpad or Q)
-- Radio channel persistence *(When entering a different vehicle)*
+- Only driver can set the radio channel.
+- Radio persistence (Your character set the same channel when entering a different vehicle)
 - Can configure resource in the server.cfg *(coming soon)*
 - Can use exports methods with your own resources *(coming soon)*
   
